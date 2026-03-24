@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasbeeh App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+      color: #fff;
+      padding: 20px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+    }
+
+    .dhikr-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+
+    .label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+    }
+
+    .dhikr-text {
+      font-size: 1.4rem;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+
+    .counter {
+      margin: 22px 0 16px;
+    }
+
+    .count-number {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .goal-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 18px 0 26px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22c55e, #84cc16);
+      transition: width 0.2s ease;
+    }
+
+    .tap-btn {
+      width: 180px;
+      height: 180px;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #0f172a;
+      background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      user-select: none;
+    }
+
+    .tap-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .controls button,
+    .controls select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 0.95rem;
+    }
+
+    .controls button {
+      cursor: pointer;
+      font-weight: 600;
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .controls button:hover {
+      opacity: 0.95;
+    }
+
+    .controls select {
+      background: #f8fafc;
+      color: #0f172a;
+      grid-column: 1 / -1;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    @media (max-width: 480px) {
+      .app {
+        padding: 22px;
+      }
+
+      .tap-btn {
+        width: 150px;
+        height: 150px;
+      }
+
+      .count-number {
+        font-size: 3.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Tasbeeh Counter</h1>
+    <p class="subtitle">Tap to count your dhikr</p>
+
+    <div class="dhikr-box">
+      <div class="label">Current Dhikr</div>
+      <div class="dhikr-text" id="dhikrText">SubhanAllah</div>
+    </div>
+
+    <div class="counter">
+      <div class="count-number" id="count">0</div>
+      <div class="goal-text" id="goalText">Goal: 33</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <button class="tap-btn" id="tapBtn">Tap</button>
+
+    <div class="controls">
+      <button id="resetBtn">Reset</button>
+      <button id="minusBtn">-1</button>
+
+      <select id="dhikrSelect">
+        <option value="SubhanAllah|33">SubhanAllah (33)</option>
+        <option value="Alhamdulillah|33">Alhamdulillah (33)</option>
+        <option value="Allahu Akbar|34">Allahu Akbar (34)</option>
+        <option value="La ilaha illallah|100">La ilaha illallah (100)</option>
+        <option value="Astaghfirullah|100">Astaghfirullah (100)</option>
+      </select>
+    </div>
+
+    <div class="footer-note" id="statusText">Keep going.</div>
+  </div>
+
+  <script>
+    const countEl = document.getElementById('count');
+    const goalTextEl = document.getElementById('goalText');
+    const dhikrTextEl = document.getElementById('dhikrText');
+    const progressBarEl = document.getElementById('progressBar');
+    const statusTextEl = document.getElementById('statusText');
+    const tapBtn = document.getElementById('tapBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const minusBtn = document.getElementById('minusBtn');
+    const dhikrSelect = document.getElementById('dhikrSelect');
+
+    let count = 0;
+    let currentDhikr = 'SubhanAllah';
+    let goal = 33;
+
+    function updateUI() {
+      countEl.textContent = count;
+      dhikrTextEl.textContent = currentDhikr;
+      goalTextEl.textContent = `Goal: ${goal}`;
+
+      const progress = Math.min((count / goal) * 100, 100);
+      progressBarEl.style.width = `${progress}%`;
+
+      if (count === 0) {
+        statusTextEl.textContent = 'Keep going.';
+      } else if (count < goal) {
+        statusTextEl.textContent = `${goal - count} remaining.`;
+      } else if (count === goal) {
+        statusTextEl.textContent = 'Goal completed. MashaAllah.';
+      } else {
+        statusTextEl.textContent = `You are ${count - goal} above your goal.`;
+      }
+
+      localStorage.setItem('tasbeehCount', count);
+      localStorage.setItem('tasbeehDhikr', currentDhikr);
+      localStorage.setItem('tasbeehGoal', goal);
+      localStorage.setItem('tasbeehSelectValue', dhikrSelect.value);
+    }
+
+    function incrementCount() {
+      count += 1;
+      updateUI();
+    }
+
+    function resetCount() {
+      count = 0;
+      updateUI();
+    }
+
+    function decreaseCount() {
+      if (count > 0) {
+        count -= 1;
+        updateUI();
+      }
+    }
+
+    function changeDhikr() {
+      const [name, selectedGoal] = dhikrSelect.value.split('|');
+      currentDhikr = name;
+      goal = Number(selectedGoal);
+      count = 0;
+      updateUI();
+    }
+
+    tapBtn.addEventListener('click', incrementCount);
+    resetBtn.addEventListener('click', resetCount);
+    minusBtn.addEventListener('click', decreaseCount);
+    dhikrSelect.addEventListener('change', changeDhikr);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.code === 'Space' || event.code === 'Enter') {
+        event.preventDefault();
+        incrementCount();
+      }
+      if (event.key.toLowerCase() === 'r') {
+        resetCount();
+      }
+    });
+
+    function loadSavedState() {
+      const savedCount = Number(localStorage.getItem('tasbeehCount'));
+      const savedDhikr = localStorage.getItem('tasbeehDhikr');
+      const savedGoal = Number(localStorage.getItem('tasbeehGoal'));
+      const savedSelectValue = localStorage.getItem('tasbeehSelectValue');
+
+      if (savedSelectValue) {
+        dhikrSelect.value = savedSelectValue;
+      }
+
+      if (!Number.isNaN(savedCount)) {
+        count = savedCount;
+      }
+
+      if (savedDhikr) {
+        currentDhikr = savedDhikr;
+      }
+
+      if (!Number.isNaN(savedGoal) && savedGoal > 0) {
+        goal = savedGoal;
+      }
+
+      updateUI();
+    }
+
+    loadSavedState();
+  </script>
+</body>
+</html>
